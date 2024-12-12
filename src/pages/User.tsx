@@ -7,7 +7,7 @@ import { Web3Context } from '../App';
 import {getEstimateAddress, fetchBalance} from '../components/estimateAddress'
 import Transfer from "../components/Transfer";
 
-function User(props: { name: string, rawId: any, publicKeys:any[]; }) {
+function User() {
     const web3 = useContext(Web3Context);
     const location = useLocation();
     const {name, rawId , publicKeys} = location.state || {}; // Safely destructure state
