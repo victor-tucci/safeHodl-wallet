@@ -7,7 +7,6 @@ type TokenKey = keyof typeof tokens;
 
 import {fetchBalance, fetchERC20Balance} from './estimateAddress'
 import {contractETHTx, contractERC20Tx, getUserOperationByHash} from './txCreation'
-import SignUserOp from './SignUserOp';
 
 import Loading from './popups/Loading';
 import TransactionPopup from './popups/TransactionPopup';

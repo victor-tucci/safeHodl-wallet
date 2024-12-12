@@ -1,10 +1,14 @@
 import React, { useState, createContext, useEffect } from 'react';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Web3 from 'web3'; // Ensure Web3.js is correctly imported
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.css';
-import Create from './components/Create';
-import Login from './components/Login';
+
+import Home from './pages/Home';
+import Create from './pages/Create';
+import Login from './pages/Login';
+import User from './pages/User';
 
 // Initialize Web3 instance
 const web3 = new Web3('http://154.53.58.114:14337/rpc');
@@ -13,33 +17,20 @@ const web3 = new Web3('http://154.53.58.114:14337/rpc');
 export const Web3Context = createContext<Web3 | null>(null);
 
 function App() {
-  const [loginType, setLoginType] = useState<number>(0); // 0: Create Wallet, 1: Login Wallet
-  const [isClicked, setIsClicked] = useState<boolean>(false);
-
-  const createClick = () => {
-    setIsClicked(true);
-    setLoginType(0);
-  };
-
-  const loginClick = () => {
-    setIsClicked(true);
-    setLoginType(1);
-  };
 
   return (
     <div className='App'>
       <h1 className="App-header" onClick={() => window.location.reload()} >Louice Wallet</h1>
 
-      {!isClicked && (
-        <div className="card">
-          <button onClick={createClick}>Create Wallet</button>
-          <button onClick={loginClick}>Login Wallet</button>
-        </div>
-      )}
-
       <Web3Context.Provider value={web3}>
-        {isClicked && loginType === 0 && <Create />}
-        {isClicked && loginType === 1 && <Login />}
+      <BrowserRouter>
+        <Routes>
+          <Route path='/' element={<Home/>}></Route>
+          <Route path='/Create' element={<Create/>}></Route>
+          <Route path='/Login' element={<Login/>}></Route>
+          <Route path='/User/:username' element={<User/>}></Route>
+        </Routes>
+      </BrowserRouter>
       </Web3Context.Provider>
     </div>
   );
