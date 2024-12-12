@@ -80,16 +80,20 @@ function Login() {
         setUsername(response.data.name);
     }
 
-    return(
-        <>
-        {publicKeys.length > 0 ?  <Wallet name={username} rawId={userRawId} publicKeys={publicKeys}/> : <>
-                <h2>Login wallet</h2>
-                <button onClick={loginPassKey}>Login</button>
-                {/* {userRawId && <p> The user Id is {userRawId}</p>} */}
-                </>
-        }
-        </>
-    )
+    return (
+      <>
+          {publicKeys.length > 0 ? (
+              <Wallet name={username} rawId={userRawId} publicKeys={publicKeys} />
+          ) : (
+              <div className='mainbody'>
+                  <h2>Login Wallet</h2>
+                  <button onClick={loginPassKey}>Login</button>
+                  {/* {userRawId && <p>The user ID is {userRawId}</p>} */}
+              </div>
+          )}
+      </>
+  );
+  
 }
 
 export default Login;

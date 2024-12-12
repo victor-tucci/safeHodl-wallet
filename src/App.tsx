@@ -1,5 +1,7 @@
 import React, { useState, createContext, useEffect } from 'react';
 import Web3 from 'web3'; // Ensure Web3.js is correctly imported
+
+import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.css';
 import Create from './components/Create';
 import Login from './components/Login';

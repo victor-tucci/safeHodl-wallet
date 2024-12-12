@@ -151,24 +151,28 @@ function Create() {
 
     }
     return (
-        <>
-        {publicKeys.length > 0 ?  <Wallet name={username} rawId={credentials.id} publicKeys ={publicKeys}/> : <>
-            <h2>Create wallet</h2>
-            <div>
-                <form>
-                    <input
-                        type="text"
-                        value={username}
-                        onChange={(e) => setUsername(e.target.value)}
-                        placeholder='wallet name'
-                    />
-                </form>
-                <button onClick={createPassKey}>Done</button>
-            </div>
-            </>
-        }
-        </>
-    )
+      <>
+          {publicKeys.length > 0 ? (
+              <Wallet name={username} rawId={credentials.id} publicKeys={publicKeys} />
+          ) : (
+              <div className='mainbody'>
+                  <h2>Create Wallet</h2>
+                  <div>
+                      <form>
+                          <input
+                              type="text"
+                              value={username}
+                              onChange={(e) => setUsername(e.target.value)}
+                              placeholder="Wallet name"
+                          />
+                      </form>
+                      <button onClick={createPassKey}>Done</button>
+                  </div>
+              </div>
+          )}
+      </>
+  );
+  
 }
 
 export default Create;

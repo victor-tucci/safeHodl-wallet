@@ -58,17 +58,12 @@ async function getChainDetails(web3: Web3) {
   
   
 // Utility to get sender address from initCode
-async function getSenderAddress(userOpProvider:any, entryContract: any, initCode: HexString): Promise<HexString> {
+async function getSenderAddress(entryContract: any, initCode: HexString): Promise<HexString> {
     var sender ='' as HexString;
     try {
         console.log("entryContract.methods:",entryContract.methods)
         const entrypointdeposite = await entryContract.methods.getSenderAddress(initCode).call()
         console.log({entrypointdeposite});
-        // const contract = new ethers.Contract(ENTRYPOINT_ADDRESS, Entrypoint.abi, userOpProvider);
-        // const methods = Object.keys(contract.functions);
-        // console.log("Available methods:", methods);
-        // await contract.getSenderAddress(initCode);
-
     }
     catch (Ex:any) {
         console.log('Exception:', Ex);
@@ -77,8 +72,14 @@ async function getSenderAddress(userOpProvider:any, entryContract: any, initCode
             sender = "0x" + Ex.data.originalError.data.slice(-40);
         } else if (Ex && Ex.data && Ex.data.data) {
             sender = "0x" + Ex.data.data.slice(-40);
-        } else {
-            // console.error('Unable to extract sender address from error.');
+        } else if (Ex && Ex.cause && Ex.cause.errorArgs &&  Ex.cause.errorArgs.sender) {
+            sender = Ex.cause.errorArgs.sender;
+        } else if(Ex && Ex.cause && Ex.cause.data) 
+        {
+            sender = "0x" + Ex.cause.data.slice(-40);
+        }
+        else{
+            console.error('Unable to extract sender address from error.');
         }
     }
     
@@ -198,9 +199,7 @@ const createTx = async (web3:any, walletAddress:HexString, rawId:string, publicK
 
         var initCode = FACTORY_ADDRESS + encodedFunctionCall.slice(2);
         console.log({initCode});
-        // const sender = await getSenderAddress(entryContract, initCode);
-        // await getSenderAddress(userOpProvider,entryContract, initCode);
-        const sender = walletAddress;
+        const sender = await getSenderAddress(entryContract, initCode);
         console.log({ sender });
 
         if (sender.toLowerCase() !== walletAddress.toLowerCase()) {

@@ -57,13 +57,13 @@ function Wallet(props: { name: string, rawId: any, publicKeys:any[]; }) {
 
     return(
         <>
-            {address && <>
+            {address && <div className='walletbody'>
                 <h2>{props.name}</h2>
                 <p>Address: {address}</p>
                 <p>Balance: {balance}</p>
 
                 <Transfer  address={address} rawId={props.rawId} publicKeys={props.publicKeys}></Transfer>
-                </>
+                </div>
             }
         </>
     )

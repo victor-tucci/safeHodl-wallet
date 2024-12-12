@@ -9,13 +9,7 @@ import {fetchBalance, fetchERC20Balance} from './estimateAddress'
 import {contractETHTx, contractERC20Tx, getUserOperationByHash} from './txCreation'
 import SignUserOp from './SignUserOp';
 
-// if (publicKey.length > 0 && publicKeyCredential) {
-//     const encodedKeys = ethers.utils.defaultAbiCoder.encode(
-//         ["uint256", "uint256", "string"],
-//         [publicKey[0], publicKey[1], publicKeyCredential.id]
-//     );
-//     setEncodedKeys(encodedKeys);
-//     }
+import Loading from './Loading';
 
 function Transfer(props: {  address: HexString, rawId: any, publicKeys:any[] }) {
     const web3 = useContext(Web3Context);
@@ -31,6 +25,8 @@ function Transfer(props: {  address: HexString, rawId: any, publicKeys:any[] }) 
 
     const [txStatus, setTxStatus] = useState<string>('');
     const [txHash, setTxHash] = useState<HexString>('');
+
+    const [loading, setLoading] = useState<boolean>(false);
 
     const handleChainChange = (e: any) => {
         setChain(e.target.value);
@@ -73,14 +69,25 @@ function Transfer(props: {  address: HexString, rawId: any, publicKeys:any[] }) 
 
     }, [chain]);
 
+    const stopLoading = () => {
+        setLoading(false);
+        setToAddress('');
+        setAmount(0);
+        setChain('ethereum');
+        setFeeType('ethereum');
+    };
+
     const handleError = (error:any) => {
         console.log('Error occurred: ', error); // Log for debugging
+        stopLoading();
     };
 
     const sendTx = async () => {
+        setLoading(true);
         // Validate Ethereum address
         if (!web3.utils.isAddress(toAddress)) {
             setIsValidAddress(false);
+            setLoading(false);
             return;
         } else {
             setIsValidAddress(true);
@@ -89,6 +96,7 @@ function Transfer(props: {  address: HexString, rawId: any, publicKeys:any[] }) 
         // Validate amount
         if (isNaN(amount) || amount <= 0) {
             setIsValidAmount(false);
+            setLoading(false);
             return;
         } else {
             setIsValidAmount(true);
@@ -124,6 +132,7 @@ function Transfer(props: {  address: HexString, rawId: any, publicKeys:any[] }) 
                 }
                 else {
                     handleError(`Chain ${chain} is not supported.`);
+                    stopLoading();
                     return;
                 }
             }
@@ -134,6 +143,8 @@ function Transfer(props: {  address: HexString, rawId: any, publicKeys:any[] }) 
             console.error('Error in sendTx:', err);
             handleError(err.message);
         }
+
+        stopLoading();
 
         //add the transaction submitted screen.
         if (!error) {
@@ -164,55 +175,70 @@ function Transfer(props: {  address: HexString, rawId: any, publicKeys:any[] }) 
 
     return (
         <>
-            <h2>Send Native Coin/Tokens...</h2>
-            <div>
-                <select value={chain} onChange={handleChainChange} style={optionBox}>
-                    <option value="ethereum">ETH (native)</option>
-                    <option value="sarvy">SAR</option>
-                    <option value="ronin">RON</option>
-                </select>
-                {!(chain === "ethereum") && <p> balance: {balance} <b>{tokens[chain].symbol}</b></p>}
-                <form>
-                    <label>
-                        To Address:<br/>
-                        <input
-                            type="text"
-                            value={toAddress}
-                            onChange={(e) => setToAddress(e.target.value)}
-                            style={getInputStyle(isValidAddress)}
-                        />
-                        {!isValidAddress && <p style={errorTextStyle}>Invalid Ethereum address.</p>}
-                    </label>
-                    <br />
-                    <label>
-                        Amount:<br/>
-                        <input
-                            type="number"
-                            value={amount}
-                            onChange={handleAmountChange}
-                            style={getInputStyle(isValidAmount)}
-                        />
-                        {!isValidAmount && <p style={errorTextStyle}>Invalid amount.</p>}
-                    </label>
-                    <br />
-                    <label>
-                        Fee:
-                        <select value={feeType} onChange={handleFeeChange} style={feeOptionBox}>
+            {loading ? (
+                <Loading />
+            ) : (
+                <div className='mainbody'>
+                    <h2>Send Native Coin/Tokens...</h2>
+                    <div>
+                        <select value={chain} onChange={handleChainChange} style={optionBox}>
                             <option value="ethereum">ETH (native)</option>
                             <option value="sarvy">SAR</option>
                             <option value="ronin">RON</option>
-                            <option value="daiCoin">(empty)</option>
-                            <option value="tether">(empty)</option>
                         </select>
-                    </label>
-                </form>
-            </div>
-
-            <button onClick={sendTx} style={button}>Send</button>
-
+                        {!(chain === "ethereum") && (
+                            <p>
+                                Balance: {balance} <b>{tokens[chain].symbol}</b>
+                            </p>
+                        )}
+                        <form>
+                            <label>
+                                To Address:
+                                <br />
+                                <input
+                                    type="text"
+                                    value={toAddress}
+                                    onChange={(e) => setToAddress(e.target.value)}
+                                    style={getInputStyle(isValidAddress)}
+                                />
+                                {!isValidAddress && (
+                                    <p style={errorTextStyle}>Invalid Ethereum address.</p>
+                                )}
+                            </label>
+                            <br />
+                            <label>
+                                Amount:
+                                <br />
+                                <input
+                                    type="number"
+                                    value={amount}
+                                    onChange={handleAmountChange}
+                                    style={getInputStyle(isValidAmount)}
+                                />
+                                {!isValidAmount && (
+                                    <p style={errorTextStyle}>Invalid amount.</p>
+                                )}
+                            </label>
+                            <br />
+                            <label>
+                                <b>Fee:</b>
+                                <select value={feeType} onChange={handleFeeChange} style={feeOptionBox}>
+                                    <option value="ethereum">ETH (native)</option>
+                                    <option value="sarvy">SAR</option>
+                                    <option value="ronin">RON</option>
+                                    <option value="daiCoin">(empty)</option>
+                                    <option value="tether">(empty)</option>
+                                </select>
+                            </label>
+                        </form>
+                    </div>
+    
+                    <button onClick={sendTx} style={button}>Send</button>
+                </div>
+            )}
         </>
     );
-}
+}    
 
 // Dynamic style function for the input field
 const getInputStyle = (isValid:boolean) => ({
@@ -220,7 +246,7 @@ const getInputStyle = (isValid:boolean) => ({
     outline: isValid ? 'none' : '2px solid red', // Red outline for invalid input
     padding: '8px',
     borderRadius: '4px',
-    width: '80%',
+    width: '544px'
 });
 
 // Static style for the error message
@@ -242,6 +268,7 @@ const feeOptionBox = {
     borderColor: 'black',
     marginTop: '10px',
     marginBottom: '10px',
+    marginLeft: '10px',
     padding: '8px',
     borderRadius: '4px',
 }
@@ -251,7 +278,7 @@ const button = {
     color: 'white',
     borderRadius: '4px',
     padding: '10px 20px',
-    width: '20%',
+    width: '10%',
     cursor: 'pointer',
 
 }

@@ -15,6 +15,7 @@
     "@simplewebauthn/browser": "^7.2.0",
     "axios": "^1.7.9",
     "base64url": "^3.0.1",
+    "bootstrap": "^5.3.3",
     "buffer": "^6.0.3",
     "cbor": "^8.1.0",
     "crypto": "^1.0.1",
@@ -23,6 +24,7 @@
     "ethers": "^5.7.2",
     "process": "^0.11.10",
     "react": "^18.2.0",
+    "react-bootstrap": "^2.10.6",
     "react-dom": "^18.2.0",
     "uuid": "^9.0.0",
     "web3": "^4.16.0"
