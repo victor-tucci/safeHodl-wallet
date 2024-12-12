@@ -72,12 +72,12 @@ async function getSenderAddress(entryContract: any, initCode: HexString): Promis
             sender = "0x" + Ex.data.originalError.data.slice(-40);
         } else if (Ex && Ex.data && Ex.data.data) {
             sender = "0x" + Ex.data.data.slice(-40);
-        } /*else if (Ex && Ex.cause && Ex.cause.errorArgs &&  Ex.cause.errorArgs.sender) {
+        } else if (Ex && Ex.cause && Ex.cause.errorArgs &&  Ex.cause.errorArgs.sender) {
             sender = Ex.cause.errorArgs.sender;
         } else if(Ex && Ex.cause && Ex.cause.data) 
         {
             sender = "0x" + Ex.cause.data.slice(-40);
-        }*/
+        }
         else{
             console.error('Unable to extract sender address from error.');
         }

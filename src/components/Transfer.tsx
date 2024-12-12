@@ -9,9 +9,9 @@ import {fetchBalance, fetchERC20Balance} from './estimateAddress'
 import {contractETHTx, contractERC20Tx, getUserOperationByHash} from './txCreation'
 import SignUserOp from './SignUserOp';
 
-import Loading from './Loading';
-import TransactionPopup from './TransactionPopup';
-import ErrorPopup from './ErrorPupUp';
+import Loading from './popups/Loading';
+import TransactionPopup from './popups/TransactionPopup';
+import ErrorPopup from './popups/ErrorPupUp';
 
 function Transfer(props: {  address: HexString, rawId: any, publicKeys:any[] }) {
     const web3 = useContext(Web3Context);
@@ -210,12 +210,14 @@ function Transfer(props: {  address: HexString, rawId: any, publicKeys:any[] }) 
                             <option value="sarvy">SAR</option>
                             <option value="ronin">RON</option>
                         </select>
+                        <br/>
+                        <small style={tip}>*Choose the appropriate coin or token for the transaction.</small>
                         {!(chain === "ethereum") && (
                             <p>
                                 Balance: {balance} <b>{tokens[chain].symbol}</b>
                             </p>
                         )}
-                        <form>
+                        <form style={txForm}>
                             <label>
                                 To Address:
                                 <br />
@@ -252,7 +254,9 @@ function Transfer(props: {  address: HexString, rawId: any, publicKeys:any[] }) 
                                     <option value="ronin">RON</option>
                                     <option value="daiCoin">(empty)</option>
                                     <option value="tether">(empty)</option>
-                                </select>
+                                </select> 
+                                <br/>
+                                <small style={tip}>*Choose the fee type based on your preferences.</small>
                             </label>
                         </form>
                     </div>
@@ -317,6 +321,17 @@ const button = {
     width: '10%',
     cursor: 'pointer',
 
+}
+
+const tip = {
+    fontSize: '12px',
+    color: '#6c757d', 
+    marginLeft: '5px' 
+}
+
+const txForm ={
+    marginTop:'20px',
+    marginBottom: '10px' 
 }
 
 export default Transfer;
