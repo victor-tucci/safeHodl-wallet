@@ -27,8 +27,8 @@ function App() {
   };
 
   return (
-    <>
-      <h1>Louice Wallet</h1>
+    <div className='App'>
+      <h1 className="App-header" onClick={() => window.location.reload()} >Louice Wallet</h1>
 
       {!isClicked && (
         <div className="card">
@@ -41,7 +41,7 @@ function App() {
         {isClicked && loginType === 0 && <Create />}
         {isClicked && loginType === 1 && <Login />}
       </Web3Context.Provider>
-    </>
+    </div>
   );
 }
 

@@ -10,6 +10,8 @@ import {contractETHTx, contractERC20Tx, getUserOperationByHash} from './txCreati
 import SignUserOp from './SignUserOp';
 
 import Loading from './Loading';
+import TransactionPopup from './TransactionPopup';
+import ErrorPopup from './ErrorPupUp';
 
 function Transfer(props: {  address: HexString, rawId: any, publicKeys:any[] }) {
     const web3 = useContext(Web3Context);
@@ -23,10 +25,31 @@ function Transfer(props: {  address: HexString, rawId: any, publicKeys:any[] }) 
     const [isValidAddress, setIsValidAddress] = useState<boolean>(true);
     const [isValidAmount, setIsValidAmount] =  useState<boolean>(true);
 
-    const [txStatus, setTxStatus] = useState<string>('');
+    const [txStatus, setTxStatus] = useState<String>('');
     const [txHash, setTxHash] = useState<HexString>('');
+    const [errorMessage, setErrorMessage] = useState<String>('');
 
-    const [loading, setLoading] = useState<boolean>(false);
+    const [loading, setLoading] = useState<boolean>(false); 
+    const [showPopup, setShowPopup] = useState<boolean>(false);
+    const [showErrorPopup, setShowErrorPopup] = useState(false);
+
+    // Monitor txStatus and show popup when it gets data
+    useEffect(() => {
+        if (txStatus) {
+            setShowPopup(true);
+        }
+        if(errorMessage){
+            setShowErrorPopup(true);
+        }
+    }, [txStatus, errorMessage]);
+
+    const handleClosePopup = () => {
+        setShowPopup(false);
+        setShowErrorPopup(false);
+        setErrorMessage('');
+        setTxStatus('');
+        setTxHash('');
+    };
 
     const handleChainChange = (e: any) => {
         setChain(e.target.value);
@@ -79,6 +102,7 @@ function Transfer(props: {  address: HexString, rawId: any, publicKeys:any[] }) 
 
     const handleError = (error:any) => {
         console.log('Error occurred: ', error); // Log for debugging
+        setErrorMessage(error);
         stopLoading();
     };
 
@@ -234,6 +258,18 @@ function Transfer(props: {  address: HexString, rawId: any, publicKeys:any[] }) 
                     </div>
     
                     <button onClick={sendTx} style={button}>Send</button>
+
+                    <TransactionPopup
+                        show={showPopup}
+                        txStatus={txStatus}
+                        txHash={txHash}
+                        onClose={handleClosePopup}
+                    />
+                    <ErrorPopup
+                    show={showErrorPopup}
+                    message={errorMessage}
+                    onClose={handleClosePopup}
+                />
                 </div>
             )}
         </>

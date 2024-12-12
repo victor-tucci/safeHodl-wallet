@@ -4,6 +4,19 @@
     padding: 2rem;
     text-align: center;
 }
+.App {
+  text-align: center;
+  max-width: 80%;
+  margin: auto;
+}
+
+.App-header {
+  font-size: calc(10px + 2vmin);
+  color: #a10bf1;
+  cursor: pointer;
+  width: 50%;
+  margin: 0 auto 20px;
+}
 
 .mainbody {
     margin-top: 3rem;
