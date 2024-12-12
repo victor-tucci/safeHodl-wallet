@@ -211,7 +211,7 @@ function Transfer(props: {  address: HexString, rawId: any, publicKeys:any[] }) 
                             <option value="ronin">RON</option>
                         </select>
                         <br/>
-                        <small style={tip}>*Choose the appropriate coin or token for the transaction.</small>
+                        <small style={tip}>*Choose the coin or token for the transaction.</small>
                         {!(chain === "ethereum") && (
                             <p>
                                 Balance: {balance} <b>{tokens[chain].symbol}</b>
