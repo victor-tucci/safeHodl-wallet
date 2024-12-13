@@ -13,7 +13,8 @@ import TransactionPopup from './popups/TransactionPopup';
 import ErrorPopup from './popups/ErrorPupUp';
 
 function Transfer(props: {  address: HexString, rawId: any, publicKeys:any[] }) {
-    const web3 = useContext(Web3Context);
+    const web3:any = useContext(Web3Context);
+
     const [balance, setBalance] = useState<number>(0);
     
     const [toAddress, setToAddress] = useState<HexString>('');

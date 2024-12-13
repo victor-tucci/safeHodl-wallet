@@ -210,10 +210,11 @@ const createTx = async (web3:any, walletAddress:HexString, rawId:string, publicK
             initCode = "0x";
         }
 
+        const nounce:number = await entryContract.methods.getNonce(sender, 0).call()
 
         const userOp: UserOperation = {
             sender,
-            nonce: `0x${(await entryContract.methods.getNonce(sender, 0).call()).toString(16)}`,
+            nonce: `0x${nounce.toString(16)}`,
             initCode,
             callData,
             preVerificationGas: '0x',
@@ -228,12 +229,13 @@ const createTx = async (web3:any, walletAddress:HexString, rawId:string, publicK
 
         const userOpsamp = {
             sender,
-            nonce: "0x" + (await entryContract.methods.getNonce(sender, 0).call()).toString(16),
+            nonce: `0x${nounce.toString(16)}`,
             initCode,
             callData,
             paymasterAndData,
             signature: "0x643b8c4c46aaaf54fce00b774621525d0ea6402f8a4d344c2d2fc196b32b26098cbfccc3d902a21f601349d5956c34b02d3845d101edaea23c6080ec0287ea2300000000000000000000000000000000000000000000000000000000000000a000000000000000000000000000000000000000000000000000000000000001000000000000000000000000000000000000000000000000000000000000000160000000000000000000000000000000000000000000000000000000000000002549960de5880e8c687434170f6476605b8fe4aeb9a28632c7995cf3ba831d97631d0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000247b2274797065223a22776562617574686e2e676574222c226368616c6c656e6765223a22000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000037222c226f726967696e223a22687474703a2f2f6c6f63616c686f73743a35313733222c2263726f73734f726967696e223a66616c73657d000000000000000000",
         };
+
         const gasEstimates = await estimateUserOperationGas(web3, userOpsamp);
         if (await isApiResponseError(gasEstimates))
             return { error: true, message: gasEstimates?.error?.message || "Gas estimate failed."};
