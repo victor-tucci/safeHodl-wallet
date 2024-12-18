@@ -44,7 +44,7 @@ export default function Create() {
         console.log("signUp payload:", payload);
 
         try {
-            const response = await fetch("http://localhost:3000/api/auth/signup", {
+            const response = await fetch("https://userapi.beldex.dev/api/auth/signup", {
               method: "POST",
               headers: {
                 "Content-Type": "application/json",

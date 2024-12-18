@@ -14,6 +14,6 @@ export const chainInfo = {
     },
     amoy: {
         FACTORY_ADDRESS: "0x6edC2BBB344225A86a7940C02FFad62a0776737E",
-        USER_OP_RPC_URL: "http://154.53.58.114:14337/rpc"
+        USER_OP_RPC_URL: "https://bundler.beldex.dev/rpc"
     }
 }

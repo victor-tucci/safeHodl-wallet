@@ -13,7 +13,7 @@ import User from './pages/User';
 import Header from './components/Header'
 
 // Initialize Web3 instance
-const web3 = new Web3('http://154.53.58.114:14337/rpc');
+const web3 = new Web3('https://bundler.beldex.dev/rpc');
 
 // Create context with default value
 export const Web3Context = createContext<Web3 | null>(null);

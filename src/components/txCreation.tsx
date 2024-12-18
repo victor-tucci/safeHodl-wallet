@@ -159,7 +159,7 @@ const getExchangeRate = async (ERC20_contract:any) => {
         method: "pm_getApprovedTokens",
         params:{}
     }
-    const response = await axios.post('http://154.53.58.114:4000/paymaster', pm_data, {
+    const response = await axios.post('https://paymaster.beldex.dev/paymaster', pm_data, {
         headers: { 'Content-Type': 'application/json' }
     });
     
@@ -177,7 +177,7 @@ async function getSponserFromPaymaster(userOp:any, ERC20_contract:HexString) {
           token_address: ERC20_contract
         }
       }
-      const response = await axios.post('http://154.53.58.114:4000/paymaster', pm_data, {
+      const response = await axios.post('https://paymaster.beldex.dev/paymaster', pm_data, {
         headers: { 'Content-Type': 'application/json' }
       });
     
